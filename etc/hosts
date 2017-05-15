@@ -1,0 +1,49 @@
+[OSEv3:vars]
+
+###########################################################################
+### Ansible Vars
+###########################################################################
+timeout=60
+ansible_become=yes
+ansible_ssh_user=ec2-user
+
+
+
+[OSEv3:children]
+lb
+masters
+etcd
+nodes
+nfs
+
+[lb]
+loadbalancer1.rdu8.internal host_zone=us-east-1d
+
+[masters]
+master1.rdu8.internal host_zone=us-east-1d
+master2.rdu8.internal host_zone=us-east-1d
+master3.rdu8.internal host_zone=us-east-1d
+
+[etcd]
+master1.rdu8.internal host_zone=us-east-1d
+master2.rdu8.internal host_zone=us-east-1d
+master3.rdu8.internal host_zone=us-east-1d
+
+[nodes]
+## These are the masters
+master1.rdu8.internal openshift_hostname=master1.rdu8.internal ansible_ssh_user=ec2-user ansible_ssh_private_key_file=~/.ssh/ocpkey.pem openshift_node_labels="{'logging':'true','openshift_schedulable':'False','cluster': 'rdu8', 'zone': 'us-east-1d'}"
+master2.rdu8.internal openshift_hostname=master2.rdu8.internal ansible_ssh_user=ec2-user ansible_ssh_private_key_file=~/.ssh/ocpkey.pem openshift_node_labels="{'logging':'true','openshift_schedulable':'False','cluster': 'rdu8', 'zone': 'us-east-1d'}"
+master3.rdu8.internal openshift_hostname=master3.rdu8.internal ansible_ssh_user=ec2-user ansible_ssh_private_key_file=~/.ssh/ocpkey.pem openshift_node_labels="{'logging':'true','openshift_schedulable':'False','cluster': 'rdu8', 'zone': 'us-east-1d'}"
+
+## These are infranodes
+infranode1.rdu8.internal openshift_hostname=infranode1.rdu8.internal openshift_ip=192.199.0.152 ansible_ssh_user=ec2-user ansible_ssh_private_key_file=~/.ssh/ocpkey.pem openshift_node_labels="{'logging':'true','cluster': 'rdu8', 'env':'infra', 'zone': 'us-east-1d'}"
+infranode2.rdu8.internal openshift_hostname=infranode2.rdu8.internal openshift_ip=192.199.0.69 ansible_ssh_user=ec2-user ansible_ssh_private_key_file=~/.ssh/ocpkey.pem openshift_node_labels="{'logging':'true','cluster': 'rdu8', 'env':'infra', 'zone': 'us-east-1d'}"
+
+## These are regular nodes
+node1.rdu8.internal openshift_hostname=node1.rdu8.internal openshift_ip=192.199.0.62 ansible_ssh_user=ec2-user ansible_ssh_private_key_file=~/.ssh/ocpkey.pem openshift_node_labels="{'logging':'true','cluster': 'rdu8', 'env':'users', 'zone': 'us-east-1d'}"
+node2.rdu8.internal openshift_hostname=node2.rdu8.internal openshift_ip=192.199.0.116 ansible_ssh_user=ec2-user ansible_ssh_private_key_file=~/.ssh/ocpkey.pem openshift_node_labels="{'logging':'true','cluster': 'rdu8', 'env':'users', 'zone': 'us-east-1d'}"
+
+[nfs]
+support1.rdu8.internal openshift_hostname=support1.rdu8.internal openshift_ip=192.199.0.5 ansible_ssh_user=ec2-user ansible_ssh_private_key_file=~/.ssh/ocpkey.pem
+support2.rdu8.internal openshift_hostname=support2.rdu8.internal openshift_ip=192.199.0.229 ansible_ssh_user=ec2-user ansible_ssh_private_key_file=~/.ssh/ocpkey.pem
+support3.rdu8.internal openshift_hostname=support3.rdu8.internal openshift_ip=192.199.0.59 ansible_ssh_user=ec2-user ansible_ssh_private_key_file=~/.ssh/ocpkey.pem
